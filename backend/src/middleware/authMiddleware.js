@@ -4,7 +4,7 @@ const User = require('../models/User');
 const protect = async (req, res, next) => {
   let token;
 
-  // 1️⃣ Read token from Authorization header
+// 1️⃣ Read token from Authorization header
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
@@ -12,10 +12,10 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
 
-      // 2️⃣ Verify token
+// 2️⃣ Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // 3️⃣ Get user from DB (exclude password)
+// 3️⃣ Get user from DB (exclude password)
       req.user = await User.findById(decoded.id).select('-password');
 
       if (!req.user) {
@@ -33,4 +33,19 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+/**
+ * Role-based access control
+ * Usage: authorize('admin') or authorize('admin', 'farmer')
+ */
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        message: `Access denied for role: ${req.user.role}`
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { protect, authorize };
