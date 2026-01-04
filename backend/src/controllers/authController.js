@@ -48,4 +48,48 @@ const registerCustomer = async (req, res) => {
   }
 };
 
-module.exports = { registerCustomer };
+// @desc    Login user (customer / farmer / admin)
+// @route   POST /api/auth/login
+// @access  Public
+const loginUser = async (req, res) => {
+  try {
+    const { identifier, password } = req.body;
+
+    // 1️⃣ Basic validation
+    if (!identifier || !password) {
+      return res.status(400).json({ message: 'Identifier and password are required' });
+    }
+
+    // 2️⃣ Find user by email OR mobile
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { mobile: identifier }]
+    }).select('+password'); // explicitly fetch password
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // 3️⃣ Compare password
+    const isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // 4️⃣ Success response with JWT
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+      role: user.role,
+      token: generateToken(user._id)
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+module.exports = { registerCustomer, loginUser };
