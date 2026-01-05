@@ -72,4 +72,40 @@ const getMyOrders = async (req, res) => {
 };
 
 
-module.exports = { createOrder, getMyOrders };
+
+/**
+ * @desc    Get orders by delivery date (Admin)
+ * @route   GET /api/orders/by-date?date=YYYY-MM-DD
+ * @access  Admin
+ */
+const getOrdersByDeliveryDate = async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    if (!date) {
+      return res.status(400).json({ message: 'Delivery date is required' });
+    }
+
+    // Create date range for the full day
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+
+    const orders = await Order.find({
+      deliveryDate: { $gte: start, $lte: end }
+    })
+      .populate('user', 'name mobile')
+      .sort({ createdAt: 1 });
+
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch orders by date' });
+  }
+};
+
+
+
+module.exports = { createOrder, getMyOrders, getOrdersByDeliveryDate };
