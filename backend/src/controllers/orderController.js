@@ -161,10 +161,74 @@ const updateOrderStatus = async (req, res) => {
 
 
 
+/**
+ * @desc    Get order status timeline for customer
+ * @route   GET /api/orders/:id/timeline
+ * @access  Customer
+ */
+const getOrderTimeline = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Ensure customer accesses only own order
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    const statusSteps = [
+      'placed',
+      'confirmed',
+      'dispatched',
+      'out_for_delivery',
+      'delivered'
+    ];
+
+    const timeline = statusSteps.map((step) => ({
+      status: step,
+      completed: statusSteps.indexOf(step) <=
+        statusSteps.indexOf(order.orderStatus)
+    }));
+
+    // Delivery message
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const delivery = new Date(order.deliveryDate);
+    delivery.setHours(0, 0, 0, 0);
+
+    let deliveryMessage = 'Scheduled';
+
+    if (delivery.getTime() === today.getTime()) {
+      deliveryMessage = 'Arriving Today';
+    } else if (delivery > today) {
+      deliveryMessage = 'Arriving Tomorrow';
+    }
+
+    res.json({
+      orderId: order._id,
+      orderStatus: order.orderStatus,
+      timeline,
+      deliveryMessage
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch order timeline' });
+  }
+};
+
+
+
+
 module.exports = {
   createOrder,
   getMyOrders,
   getOrdersByDeliveryDate,
-  updateOrderStatus
+  updateOrderStatus,
+  getOrderTimeline
 };
+
 
