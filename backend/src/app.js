@@ -13,4 +13,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
 
+// Product routes
+app.use('/api/products', require('./routes/productRoutes'));
+
+
 module.exports = app;
