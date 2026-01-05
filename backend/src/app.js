@@ -19,5 +19,8 @@ app.use('/api/products', require('./routes/productRoutes'));
 // Order routes
 app.use('/api/orders', require('./routes/orderRoutes'));
 
+// Farmer routes
+app.use('/api/farmer', require('./routes/farmerRoutes'));
+
 
 module.exports = app;
