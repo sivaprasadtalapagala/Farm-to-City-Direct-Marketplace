@@ -107,5 +107,64 @@ const getOrdersByDeliveryDate = async (req, res) => {
 };
 
 
+/**
+ * @desc    Update order status (Admin)
+ * @route   PATCH /api/orders/:id/status
+ * @access  Admin
+ */
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const orderId = req.params.id;
 
-module.exports = { createOrder, getMyOrders, getOrdersByDeliveryDate };
+    const allowedStatuses = [
+      'placed',
+      'confirmed',
+      'dispatched',
+      'out_for_delivery',
+      'delivered'
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid order status' });
+    }
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Optional: prevent backward status change
+    const currentIndex = allowedStatuses.indexOf(order.orderStatus);
+    const newIndex = allowedStatuses.indexOf(status);
+
+    if (newIndex < currentIndex) {
+      return res.status(400).json({
+        message: 'Order status cannot be moved backward'
+      });
+    }
+
+    order.orderStatus = status;
+    await order.save();
+
+    res.json({
+      message: 'Order status updated',
+      orderId: order._id,
+      status: order.orderStatus
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update order status' });
+  }
+};
+
+
+
+module.exports = {
+  createOrder,
+  getMyOrders,
+  getOrdersByDeliveryDate,
+  updateOrderStatus
+};
+
