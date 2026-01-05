@@ -16,5 +16,8 @@ app.get('/health', (req, res) => {
 // Product routes
 app.use('/api/products', require('./routes/productRoutes'));
 
+// Order routes
+app.use('/api/orders', require('./routes/orderRoutes'));
+
 
 module.exports = app;
