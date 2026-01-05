@@ -53,4 +53,23 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+
+/**
+ * @desc    Get logged-in user's orders
+ * @route   GET /api/orders/my
+ * @access  Customer
+ */
+const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .sort({ createdAt: -1 });
+
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch orders' });
+  }
+};
+
+
+module.exports = { createOrder, getMyOrders };
