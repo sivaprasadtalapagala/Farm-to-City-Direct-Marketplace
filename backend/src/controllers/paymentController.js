@@ -51,4 +51,71 @@ const createRazorpayOrder = async (req, res) => {
   }
 };
 
-module.exports = { createRazorpayOrder };
+
+
+const crypto = require('crypto');
+
+/**
+ * @desc    Verify Razorpay payment
+ * @route   POST /api/payments/razorpay/verify
+ * @access  Customer
+ */
+const verifyRazorpayPayment = async (req, res) => {
+  try {
+    const {
+      orderId,
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature
+    } = req.body;
+
+    if (!orderId || !razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
+      return res.status(400).json({ message: 'Missing payment verification data' });
+    }
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Ensure order belongs to user
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    // 🔐 Generate signature
+    const body = `${razorpayOrderId}|${razorpayPaymentId}`;
+
+    const expectedSignature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest('hex');
+
+    if (expectedSignature !== razorpaySignature) {
+      return res.status(400).json({ message: 'Payment verification failed' });
+    }
+
+    // ✅ Payment verified
+    order.paymentStatus = 'paid';
+    order.paymentResult = {
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature
+    };
+
+    await order.save();
+
+    res.json({
+      message: 'Payment verified successfully',
+      orderId: order._id,
+      paymentStatus: order.paymentStatus
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Payment verification failed' });
+  }
+};
+
+
+module.exports = { createRazorpayOrder, verifyRazorpayPayment };
