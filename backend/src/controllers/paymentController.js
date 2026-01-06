@@ -98,6 +98,10 @@ const verifyRazorpayPayment = async (req, res) => {
 
     // ✅ Payment verified
     order.paymentStatus = 'paid';
+
+    // ✅ Auto-confirm order after payment
+    order.orderStatus = 'confirmed';
+
     order.paymentResult = {
       razorpayOrderId,
       razorpayPaymentId,
@@ -105,6 +109,10 @@ const verifyRazorpayPayment = async (req, res) => {
     };
 
     await order.save();
+
+    // 🔔 Notification hook (Phase-1: console log)
+    console.log(`📦 Order ${order._id} confirmed after successful payment`);
+
 
     res.json({
       message: 'Payment verified successfully',
