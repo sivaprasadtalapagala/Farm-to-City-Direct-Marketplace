@@ -5,6 +5,11 @@ const { createRazorpayOrder } = require('../controllers/paymentController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 const { verifyRazorpayPayment } = require('../controllers/paymentController');
 
+const { verifyPaymentValidator } = require('../validators/paymentValidators');
+const validateRequest = require('../middleware/validateRequest');
+
+
+
 router.post(
   '/razorpay/create',
   protect,
@@ -12,6 +17,6 @@ router.post(
   createRazorpayOrder
 );
 
-router.post('/razorpay/verify', protect, authorize('customer'), verifyRazorpayPayment);
+router.post('/razorpay/verify', protect, authorize('customer'), verifyPaymentValidator, validateRequest, verifyRazorpayPayment);
 
 module.exports = router;

@@ -11,7 +11,12 @@ const {
 
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-router.post('/', protect, authorize('customer'), createOrder);
+const { createOrderValidator } = require('../validators/orderValidators');
+const validateRequest = require('../middleware/validateRequest');
+
+
+
+router.post('/', protect, authorize('customer'), createOrderValidator, validateRequest, createOrder);
 router.get('/my', protect, authorize('customer'), getMyOrders);
 router.get('/by-date', protect, authorize('admin'), getOrdersByDeliveryDate);
 router.patch('/:id/status', protect, authorize('admin'), updateOrderStatus);
