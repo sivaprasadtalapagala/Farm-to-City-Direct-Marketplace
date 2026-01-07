@@ -1,8 +1,18 @@
+const cors = require('cors');
 const express = require('express');
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
+
+app.use(cors({
+  origin: [
+    'http://localhost:4200',
+    'https://farm-to-city-direct-marketplace.onrender.com'
+  ],
+  credentials: true
+}));
+
 
 // =====================
 // Middleware
