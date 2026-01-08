@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { ApiService } from './core/services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +11,4 @@ import { ApiService } from './core/services/api.service';
 })
 export class AppComponent {
   title = 'frontend';
-
-  api = inject(ApiService);
-
-  constructor() {
-    this.api.get('/health').subscribe(console.log);
-  }
 }
