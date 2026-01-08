@@ -38,3 +38,19 @@
   color: #2e7d32;
   font-weight: 600;
 }
+
+
+/* Existing styles stay */
+
+/* Button fixes */
+.add-to-cart-btn {
+  width: 100%;
+  cursor: pointer; /* 👈 HAND SYMBOL */
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* Hover effect */
+.add-to-cart-btn:hover {
+  filter: brightness(0.95);
+}

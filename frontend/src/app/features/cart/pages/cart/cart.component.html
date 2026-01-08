@@ -1,0 +1,65 @@
+<div class="cart-container">
+
+  <h2>Your Cart</h2>
+
+  <!-- Empty Cart -->
+  <p *ngIf="cartItems().length === 0" class="empty">
+    Your cart is empty
+  </p>
+
+  <!-- Cart Items -->
+  <div *ngIf="cartItems().length > 0" class="cart-list">
+
+    <div
+      class="cart-item"
+      *ngFor="let item of cartItems()"
+    >
+      <div class="details">
+        <h4>{{ item.product.name }}</h4>
+        <p>₹{{ item.product.pricePerKg }} / kg</p>
+      </div>
+
+      <div class="quantity">
+        <button
+          mat-icon-button
+          class="qty-btn"
+          (click)="decrease(item.product._id)"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <span>{{ item.quantity }}</span>
+
+        <button
+          mat-icon-button
+          class="qty-btn"
+          (click)="increase(item.product._id)"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="price">
+        ₹{{ item.totalPrice }}
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Total -->
+    <div class="total">
+      <span>Total</span>
+      <span>₹{{ totalAmount() }}</span>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="checkout-btn"
+      routerLink="/checkout"
+    >
+      Proceed to Checkout
+    </button>
+
+  </div>
+</div>

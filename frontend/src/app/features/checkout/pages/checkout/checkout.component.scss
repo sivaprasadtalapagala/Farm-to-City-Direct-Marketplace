@@ -1,0 +1,24 @@
+.checkout-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 16px 0;
+}
+
+.place-order-btn {
+  width: 100%;
+  cursor: pointer;
+}

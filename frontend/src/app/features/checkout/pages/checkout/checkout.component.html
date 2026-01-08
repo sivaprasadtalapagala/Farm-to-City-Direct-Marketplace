@@ -1,0 +1,29 @@
+<div class="checkout-container">
+
+  <h2>Order Summary</h2>
+
+  <div *ngFor="let item of cartItems()" class="row">
+    <span>
+      {{ item.product.name }} × {{ item.quantity }}
+    </span>
+    <span>₹{{ item.totalPrice }}</span>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="total">
+    <span>Total</span>
+    <span>₹{{ totalAmount() }}</span>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="place-order-btn"
+    [disabled]="loading"
+    (click)="placeOrder()"
+  >
+    Place Order
+  </button>
+
+</div>

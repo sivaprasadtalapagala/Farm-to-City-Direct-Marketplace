@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { getProductImage } from '../../utils/product-image.util';
+import { CartService } from '../../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -25,7 +26,7 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   loading = true;
 
-  constructor(private productService: ProductService, private cdr: ChangeDetectorRef) {}
+  constructor(private productService: ProductService, private cartService: CartService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe({
@@ -49,4 +50,8 @@ export class ProductListComponent implements OnInit {
   trackById(_: number, item: Product) {
     return item._id;
   }
+
+  addToCart(product: Product): void {
+  this.cartService.addToCart(product);
+}
 }

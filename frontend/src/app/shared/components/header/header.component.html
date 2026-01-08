@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <span class="logo">Farm-to-City</span>
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button routerLink="/cart">
+    <mat-icon
+      matBadge="{{ cartCount() }}"
+      matBadgeColor="warn"
+    >
+      shopping_cart
+    </mat-icon>
+  </button>
+</mat-toolbar>

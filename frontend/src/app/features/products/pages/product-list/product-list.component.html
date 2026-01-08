@@ -7,23 +7,39 @@
 
   <!-- Product Grid -->
   <div *ngIf="!loading" class="product-grid">
+
     <mat-card
       class="product-card"
       *ngFor="let product of products; trackBy: trackById"
     >
+      <!-- Image -->
       <img
         mat-card-image
         [src]="getImage(product)"
         [alt]="product.name"
       />
 
+      <!-- Content -->
       <mat-card-content>
         <h3>{{ product.name }}</h3>
         <p class="price">
           ₹{{ product.pricePerKg }} / {{ product.unit }}
         </p>
       </mat-card-content>
-    </mat-card>
-  </div>
 
+      <!-- ACTION -->
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          class="add-to-cart-btn"
+          (click)="addToCart(product)"
+        >
+          Add to Cart
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+
+  </div>
 </div>
