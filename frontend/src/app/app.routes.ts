@@ -9,11 +9,12 @@ export const routes: Routes = [
   },
 
   {
-    path: '',
-    canActivate: [AuthGuard],
-    loadComponent: () =>
-      import('./features/home/home.component').then(m => m.HomeComponent)
-  },
+  path: '',
+  canActivate: [AuthGuard],
+  loadComponent: () =>
+    import('./features/products/pages/product-list/product-list.component')
+      .then(m => m.ProductListComponent)
+},
 
   {
     path: '**',
