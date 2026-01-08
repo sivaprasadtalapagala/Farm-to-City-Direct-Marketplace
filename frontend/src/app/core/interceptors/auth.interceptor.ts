@@ -1,42 +1,34 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+import { catchError, throwError } from 'rxjs';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  let token: string | null = null;
 
-    const token = localStorage.getItem('token');
-
-    const authReq = token
-      ? req.clone({
-          setHeaders: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-      : req;
-
-    return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          localStorage.removeItem('token');
-          this.router.navigate(['/auth/login']);
-        }
-        return throwError(() => error);
-      })
-    );
+  if (isPlatformBrowser(platformId)) {
+    token = localStorage.getItem('token');
   }
-}
+
+  const authReq = token
+    ? req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    : req;
+
+  return next(authReq).pipe(
+    catchError((error) => {
+      if (error.status === 401 && isPlatformBrowser(platformId)) {
+        localStorage.removeItem('token');
+        router.navigate(['/auth/login']);
+      }
+      return throwError(() => error);
+    })
+  );
+};
