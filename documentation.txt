@@ -241,3 +241,60 @@ Created test customer: customer@test.com / test123
 Created test farmer: farmer@test.com / test123
 Created 8 products
 Seed data created successfully!
+
+
+
+
+
+
+
+
+
+
+//backend
+https://account.mongodb.com/account/login   (login with gmail)
+Add IP Address
+npm run dev
+
+
+
+
+Db ip setup:
+https://account.mongodb.com/
+login with gmail
+
+
+
+
+"role": "customer",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NWMwNmVkOTY1YjkxZjcyYTFlZWJmZSIsImlhdCI6MTc2NzcyODcyMCwiZXhwIjoxNzY3ODE1MTIwfQ.OGWpvT9KM6d8Zq3lylO2BvmDKyPiDz2M77hcfoZenxM"
+
+
+"role": "admin",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NWFkZWZiYTRmMmM4NTQyZmUyZGQyMSIsImlhdCI6MTc2NzYzNzY5OSwiZXhwIjoxNzY3NzI0MDk5fQ.9yzBhVp8IMtqf-J5JkMbYuxd1CUlX6HeQ6bNIPN0bMs"
+
+"role": "farmer",
+"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NWMxMmYzZWQ5NzE1YzhmNjYwNTZlMSIsImlhdCI6MTc2NzY0MjAxMywiZXhwIjoxNzY3NzI4NDEzfQ.1ruFsrqvtihPh2skuiz0rtMiILhAi4ZfpGRHo5VBsvo"
+
+
+
+
+
+
+
+TEST API KEY : rzp_test_S0iBYHphFljbTi
+Test Key Secret : 39eCkuKfKBqIiEFXpo24iIGj
+
+
+
+TAST21 pending
+TAST22 pending
+TASK #25 pending
+TASK #26 pending
+
+
+
+
+ng serve = development
+ng build = production
+ng build --configuration=development = development
