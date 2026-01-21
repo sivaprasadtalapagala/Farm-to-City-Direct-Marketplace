@@ -1,0 +1,30 @@
+.orders-container {
+  max-width: 720px;
+  margin: auto;
+  padding: 16px;
+}
+
+.order-card {
+  margin-bottom: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.items {
+  margin: 8px 0;
+  color: #555;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.amount {
+  color: #2e7d32;
+}

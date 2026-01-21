@@ -1,1 +1,33 @@
 <p>order-history works!</p>
+<div class="orders-container">
+
+  <h2>Your Orders</h2>
+
+  <p *ngIf="!loading && orders.length === 0">
+    No orders yet.
+  </p>
+
+  <mat-card
+    *ngFor="let order of orders"
+    class="order-card"
+  >
+    <div class="header">
+      <span>Order #{{ order._id.slice(-6) }}</span>
+      <mat-chip color="primary" selected>
+        {{ getDeliveryBadge(order.deliveryDate) }}
+      </mat-chip>
+    </div>
+
+    <div class="items">
+      <div *ngFor="let item of order.items">
+        {{ item.name }} × {{ item.quantity }}
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Status: {{ order.orderStatus }}</span>
+      <span class="amount">₹{{ order.totalAmount }}</span>
+    </div>
+  </mat-card>
+
+</div>

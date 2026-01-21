@@ -27,6 +27,13 @@ export const routes: Routes = [
     import('./features/checkout/pages/checkout/checkout.component')
       .then(m => m.CheckoutComponent)
 },
+{
+  path: 'orders',
+  loadComponent: () =>
+    import('./features/orders/pages/order-history/order-history.component')
+      .then(m => m.OrderHistoryComponent)
+},
+
 
   {
     path: '**',
